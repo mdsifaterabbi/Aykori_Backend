@@ -42,3 +42,32 @@ export const createJobController = async (req, res) => {
     console.log(error);
   }
 };
+
+//get all jobs
+export const getAllJobsController = async (req, res) => {
+  try {
+    const { limit = 5, sort = "-createdAt" } = req.query; // Get query parameters
+
+    const allJobs = await JobModel.find({}); //here we find all jobs
+
+    const recentJobs = await JobModel.find({}, null, {
+      // Use options for sorting and limit
+      sort: sort,
+      limit: parseInt(limit),
+    });
+
+    res.send({
+      success: true,
+      message: "All Category list",
+      allJobs,
+      recentJobs,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      success: false,
+      message: "Error occurred in getAllJobsController",
+      error,
+    });
+  }
+};

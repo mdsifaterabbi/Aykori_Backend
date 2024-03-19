@@ -148,3 +148,66 @@ export const deleteApplicantController = async (req, res) => {
     console.log(error);
   }
 };
+
+export const findAllApplicantBySlug = async (req, res) => {
+  try {
+    const slug = req.params.slug;
+
+    const totalApplicantPerSlug = await applicantModel.find({ slug: slug });
+
+    const tApplicantperSlug = totalApplicantPerSlug.length;
+
+    if (tApplicantperSlug === 0) {
+      return res.send({
+        success: false,
+        message: "No applicant found for this slug",
+      });
+    }
+
+    res.send({
+      success: true,
+      message: "You are in findAllApplicantBySlug controller",
+      slug,
+      totalApplicantPerSlug,
+      tApplicantperSlug,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//finding total applicant
+export const findTotalApplicant = async (req, res) => {
+  try {
+    const result = await applicantModel.find();
+    const totalApplicant = result.length;
+    res.send({
+      success: true,
+      message: `Total applicant is ${totalApplicant}`,
+      totalApplicant,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//finding total applicant depending on applicant status
+//applicantStatus = 0 (initially applied), 1(short listed), 2(rejected)
+export const findApplicantStatus = async (req, res) => {
+  try {
+    const shortListed = await applicantModel.find({ applicantStatus: 1 });
+    const rejected = await applicantModel.find({ applicantStatus: 2 });
+
+    const totalShortListed = shortListed.length;
+    const totalRejected = rejected.length;
+
+    res.send({
+      success: true,
+      message: `Total shortlisted candidates: ${totalShortListed} and rejected: ${totalRejected}`,
+      totalShortListed,
+      totalRejected,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
