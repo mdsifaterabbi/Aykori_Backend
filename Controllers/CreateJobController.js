@@ -56,11 +56,19 @@ export const getAllJobsController = async (req, res) => {
       limit: parseInt(limit),
     });
 
+    const uniqueSlugs = new Set();
+    for (const job of allJobs) {
+      uniqueSlugs.add(job.slug);
+    }
+
+    const mySlugs = Array.from(uniqueSlugs); // Convert set to array if needed
+
     res.send({
       success: true,
       message: "All Category list",
       allJobs,
       recentJobs,
+      mySlugs,
     });
   } catch (error) {
     console.log(error);

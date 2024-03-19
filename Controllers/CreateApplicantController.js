@@ -10,7 +10,7 @@ import applicantModel from "../Models/applicantModel.js";
 
 export const createApplicantController = async (req, res) => {
   try {
-    const { name, email, phone, slug } = req.body;
+    const { name, email, phone, slug, gender } = req.body;
 
     //verify here if slug is available in the JobModel or not
     const existingSlug = await JobModel.findOne({ slug });
@@ -41,6 +41,7 @@ export const createApplicantController = async (req, res) => {
       email,
       phone,
       slug,
+      gender,
       applicantStatus,
     });
 
@@ -54,6 +55,7 @@ export const createApplicantController = async (req, res) => {
       email,
       phone,
       slug,
+      gender,
       applicantStatus,
       data: newApplicant,
     });
@@ -80,6 +82,9 @@ export const updateApplicantController = async (req, res) => {
 
     if ("applicantStatus" in updates) {
       updateObject.applicantStatus = updates.applicantStatus;
+    }
+    if ("gender" in updates) {
+      updateObject.gender = updates.gender;
     }
 
     //dont update email or slug
@@ -206,6 +211,29 @@ export const findApplicantStatus = async (req, res) => {
       message: `Total shortlisted candidates: ${totalShortListed} and rejected: ${totalRejected}`,
       totalShortListed,
       totalRejected,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//finding applicant status based on slug
+export const findApplicantStatusBasenOnSlug = async (req, res) => {
+  try {
+    const slug = req.params.slug;
+    const sh = await applicantModel.find({ applicantStatus: 1, slug: slug });
+    const re = await applicantModel.find({ applicantStatus: 2, slug: slug });
+
+    const shorlistedBySlug = sh.length;
+    const rejectedBySlug = re.length;
+
+    res.send({
+      success: true,
+      message: `Found ${shorlistedBySlug} shortlisted and ${rejectedBySlug} rejected for ${slug}`,
+      shorlistedBySlug,
+      rejectedBySlug,
+      sh,
+      re,
     });
   } catch (error) {
     console.log(error);

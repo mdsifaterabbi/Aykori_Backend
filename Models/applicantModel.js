@@ -23,6 +23,10 @@ const applicantsSchema = new mongoose.Schema(
       type: Number, // Set the field type to Number
       default: 0, // Set the default value to 0
     },
+    gender: {
+      type: Boolean, // 0 for male and 1 for female
+      required: true,
+    },
   },
   {
     timestamps: true, // Add this line to enable timestamps

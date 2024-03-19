@@ -8,6 +8,7 @@ import {
   deleteApplicantController,
   findAllApplicantBySlug,
   findApplicantStatus,
+  findApplicantStatusBasenOnSlug,
   findTotalApplicant,
   updateApplicantController,
 } from "../Controllers/CreateApplicantController.js";
@@ -27,16 +28,19 @@ router.post("/create-job", createJobController);
 
 router.post("/create-applicant", createApplicantController);
 
-router.patch("/update-applicant/:id", updateApplicantController); //for partial update
+router.patch("/update-applicant/:id", updateApplicantController);
 
 router.delete("/delete-applicant/:id", deleteApplicantController);
 
 router.get("/get-all-jobs", getAllJobsController);
 
-router.post("/applicant-per-job/:slug", findAllApplicantBySlug);
+router.post("/applicant-per-job/:slug", findAllApplicantBySlug); 
 
 router.get("/total-applicants", findTotalApplicant);
 
 router.get("/find-applicant-status", findApplicantStatus);
+
+//slug wise applican status
+router.post("/find-applicant-status/:slug", findApplicantStatusBasenOnSlug); //working ***
 
 export default router;
